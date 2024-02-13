@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-use common\models\Category;
 use yii\db\Migration;
 
-class m150725_192744_tag extends Migration
+class m150725_192748_create_tags_table extends Migration
 {
+    private const TABLE = '{{%tags}}';
+
     public function safeUp(): void
     {
-        $this->createTable('{{%tag}}', [
+        $this->createTable(self::TABLE, [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
             'created_at' => $this->integer(),
@@ -17,11 +18,8 @@ class m150725_192744_tag extends Migration
         ]);
     }
 
-    /**
-     * @return bool|void
-     */
-    public function safeDown()
+    public function safeDown(): void
     {
-        $this->dropTable('tag');
+        $this->dropTable(self::TABLE);
     }
 }

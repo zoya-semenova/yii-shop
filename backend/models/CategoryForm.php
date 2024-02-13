@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace backend\models;
 
 use common\models\Category;
@@ -9,18 +11,14 @@ use yii\base\Model;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
-/**
- * Create category form
- */
 class CategoryForm extends Model
 {
+    public $alias;
+
     public $title;
 
     private $model;
 
-    /**
-     * @inheritdoc
-     */
     public function rules(): array
     {
         return [
@@ -37,9 +35,6 @@ class CategoryForm extends Model
         ];
     }
 
-    /**
-     * @return Category
-     */
     public function getModel(): Category
     {
         if (!$this->model) {
@@ -48,21 +43,15 @@ class CategoryForm extends Model
         return $this->model;
     }
 
-    /**
-     * @param Category $model
-     * @return mixed
-     */
-    public function setModel($model)
+    public function setModel(Category $model): Category
     {
         $this->title = $model->title;
+        $this->alias = $model->alias;
         $this->model = $model;
 
         return $this->model;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels(): array
     {
         return [
@@ -71,14 +60,13 @@ class CategoryForm extends Model
     }
 
     /**
-     * Signs user up.
-     * @return bool|null
      * @throws Exception
      */
     public function save(): ?bool
     {
         if ($this->validate()) {
             $model = $this->getModel();
+            $model->alias = $this->alias;
             $model->title = $this->title;
             if (!$model->save()) {
                 throw new Exception('Model not saved');

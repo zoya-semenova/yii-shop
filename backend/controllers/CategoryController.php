@@ -1,22 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace backend\controllers;
 
 use backend\models\CategoryForm;
 use backend\models\search\CategorySearch;
-use backend\models\UserForm;
 use common\models\Category;
 use Yii;
+use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-/**
- * CategoryController implements the CRUD actions for Category model.
- */
+
 class CategoryController extends Controller
 {
     public function behaviors(): array
@@ -37,41 +36,22 @@ class CategoryController extends Controller
      */
     public function actionIndex(): string
     {
-        //$searchModel = new CategorySearch();
-        //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new CategorySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            //'searchModel' => $searchModel,
-            'dataProvider' => new ActiveDataProvider([
-                'query' => Category::find(),
-            ]),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Category model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException
+     * @throws Exception
      */
-    public function actionView($id): string
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-
-    /**
-     * Creates a new Category model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     * @throws \yii\base\Exception
-     */
-    public function actionCreate()
+    public function actionCreate(): Response|string
     {
         $model = new CategoryForm();
-        //$model->setScenario('create');
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
@@ -82,22 +62,14 @@ class CategoryController extends Controller
     }
 
     /**
-     * Updates an existing Category model.
-     * @param integer $id
-     * @return mixed
      * @throws NotFoundHttpException
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
-    public function actionUpdate($id)
-    {//echo "<pre>";print_r($this->findModel($id));exit;
-        //$model = new CategoryForm();
-        //echo "<pre>";print_r($this->findModel($id));
+    public function actionUpdate(int $id): Response|string
+    {
         $model = new CategoryForm();
         $model->setModel($this->findModel($id));
-        //$model = $this->findModel($id);
-        //echo "<pre>";print_r($model); exit;
-        //$model->load(Yii::$app->request->post());
-        //$model->save();echo "<pre>";print_r($model);exit;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
@@ -108,10 +80,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
      * @throws NotFoundHttpException
      * @throws \Exception
      * @throws \Throwable
@@ -125,18 +93,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Category the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException
      */
-    protected function findModel($id): Category
+    protected function findModel(int $id): Category
     {
         if (($model = Category::findOne($id)) !== null) {
             return $model;
         }
         throw new NotFoundHttpException('The requested page does not exist.');
-
     }
 }

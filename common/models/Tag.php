@@ -1,49 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace common\models;
 
 use Yii;
-use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 
 /**
- * Category model
+ * Tag model
  *
  * @property integer $id
  * @property string $title
  * @property integer $created_at
  * @property integer $updated_at
- *
- * @property \common\models\UserProfile $userProfile
  */
 class Tag extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
     public static function tableName(): string
     {
-        return '{{%tag}}';
+        return '{{%tags}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels(): array
     {
         return [
-            'title' => Yii::t('common', 'Title'),
+            'title' => Yii::t('common', 'Название'),
             'created_at' => Yii::t('common', 'Created at'),
             'updated_at' => Yii::t('common', 'Updated at'),
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function behaviors(): array
     {
         return [
@@ -51,9 +39,6 @@ class Tag extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules(): array
     {
         return [
@@ -62,10 +47,7 @@ class Tag extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->getPrimaryKey();
     }

@@ -2,12 +2,11 @@
 
 /**
  * @var $this yii\web\View
- * @var $model backend\models\UserForm
- * @var $roles yii\rbac\Role[]
+ * @var $model backend\models\CategoryForm
  */
 
 $this->title = Yii::t('backend', 'Create {modelClass}', [
-    'modelClass' => 'Category',
+    'modelClass' => 'Категории',
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

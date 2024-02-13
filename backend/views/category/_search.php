@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 
 /**
  * @var $this yii\web\View
- * @var $model backend\models\search\UserSearch
+ * @var $model backend\models\search\CategorySearch
  * @var $form yii\bootstrap\ActiveForm
  */
 ?>

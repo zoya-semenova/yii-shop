@@ -2,33 +2,35 @@
 
 declare(strict_types=1);
 
-use common\models\Category;
 use yii\db\Migration;
 
-class m150725_192745_product_tag extends Migration
+class m150725_192749_create_products_tags_table extends Migration
 {
+    private const TABLE = '{{%products_tags}}';
+
     public function safeUp(): void
     {
-        $this->createTable('product_tag', [
+        $this->createTable(self::TABLE, [
             'product_id' => $this->integer(),
             'tag_id' => $this->integer(),
             'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
             'PRIMARY KEY(product_id, tag_id)',
         ]);
 
         // creates index for column `post_id`
         $this->createIndex(
             'idx-product_tag-product_id',
-            'product_tag',
+            self::TABLE,
             'product_id'
         );
 
         // add foreign key for table `post`
         $this->addForeignKey(
             'fk-product_tag-product_id',
-            'product_tag',
+            self::TABLE,
             'product_id',
-            'product',
+            'products',
             'id',
             'CASCADE'
         );
@@ -36,50 +38,47 @@ class m150725_192745_product_tag extends Migration
         // creates index for column `tag_id`
         $this->createIndex(
             'idx-product_tag-tag_id',
-            'product_tag',
+            self::TABLE,
             'tag_id'
         );
 
         // add foreign key for table `tag`
         $this->addForeignKey(
             'fk-product_tag-tag_id',
-            'product_tag',
+            self::TABLE,
             'tag_id',
-            'tag',
+            'tags',
             'id',
             'CASCADE'
         );
     }
 
-    /**
-     * @return bool|void
-     */
-    public function safeDown()
+    public function safeDown(): void
     {
         // drops foreign key for table `post`
         $this->dropForeignKey(
             'fk-product_tag-product_id',
-            'post_tag'
+            self::TABLE
         );
 
         // drops index for column `post_id`
         $this->dropIndex(
             'idx-product_tag-product_id',
-            'product_tag'
+            self::TABLE
         );
 
         // drops foreign key for table `tag`
         $this->dropForeignKey(
             'fk-product_tag-tag_id',
-            'product_tag'
+            self::TABLE
         );
 
         // drops index for column `tag_id`
         $this->dropIndex(
             'idx-product_tag-tag_id',
-            'product_tag'
+            self::TABLE
         );
 
-        $this->dropTable('product_tag');
+        $this->dropTable(self::TABLE);
     }
 }

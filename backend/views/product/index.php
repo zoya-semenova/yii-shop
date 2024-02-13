@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php echo Html::a(Yii::t('backend', 'Create {modelClass}', [
-            'modelClass' => 'Product',
+            'modelClass' => 'Продукта',
         ]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
@@ -42,18 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->getCategoryTitle();
                 }
             ],
-            /*
-            [
-                'attribute' => 'category_id',
-                'value' => function ($model, $key, $index, $column) {
-                    //  var_dump($model); var_dump($key); exit;
-                    return Html::activeDropDownList($model, 'category_id',
-                        \yii\helpers\ArrayHelper::map(\common\models\Category::find()->all(), 'id', 'title')
-
-                    );
-                },
-                'format' => 'raw',
-                ],*/
             [
                 'attribute' => 'created_at',
                 'format' => 'datetime',
@@ -67,7 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dp.change' => new JsExpression('(e) => $(e.target).find("input").trigger("change.yiiGridView")')
                     ],
                 ])
-
             ],
             [
                 'class' => ActionColumn::class,

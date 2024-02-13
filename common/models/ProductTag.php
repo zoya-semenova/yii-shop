@@ -1,19 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace common\models;
 
 use Yii;
-use yii\behaviors\AttributeBehavior;
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 
 /**
- * Category model
+ * ProductTag model
  *
  * @property integer $id
- * @property string $title
+ * @property integer $product_id
+ * @property integer $tag_id
  * @property integer $created_at
  * @property integer $updated_at
  *
@@ -26,7 +26,7 @@ class ProductTag extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%product_tag}}';
+        return '{{%products_tags}}';
     }
 
     /**

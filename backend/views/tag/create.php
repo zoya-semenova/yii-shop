@@ -7,12 +7,12 @@
  */
 
 $this->title = Yii::t('backend', 'Create {modelClass}', [
-    'modelClass' => 'Category',
+    'modelClass' => 'Тега',
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Tags'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="category-create">
+<div class="tag-create">
 
     <?php echo $this->render('_form', [
         'model' => $model

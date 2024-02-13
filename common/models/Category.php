@@ -1,49 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace common\models;
 
 use Yii;
-use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 
 /**
  * Category model
  *
  * @property integer $id
  * @property string $title
+ * @property string $alias
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property \common\models\UserProfile $userProfile
  */
 class Category extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
     public static function tableName(): string
     {
-        return '{{%category}}';
+        return '{{%categories}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels(): array
     {
         return [
             'title' => Yii::t('common', 'Title'),
+            'alias' => Yii::t('common', 'Alias'),
             'created_at' => Yii::t('common', 'Created at'),
             'updated_at' => Yii::t('common', 'Updated at'),
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function behaviors(): array
     {
         return [
@@ -51,21 +42,15 @@ class Category extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules(): array
     {
         return [
-            [['title'], 'unique'],
-            [['title'], 'filter', 'filter' => '\yii\helpers\Html::encode']
+            [['title', 'alias'], 'unique'],
+            [['title', 'alias'], 'filter', 'filter' => '\yii\helpers\Html::encode']
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->getPrimaryKey();
     }

@@ -1,27 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace backend\controllers;
 
-use backend\models\CategoryForm;
-use backend\models\ProductForm;
-use backend\models\search\CategorySearch;
 use backend\models\search\ProductSearch;
-use backend\models\UserForm;
-use common\models\Category;
 use common\models\Product;
 use common\models\ProductTag;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
-/**
- * CategoryController implements the CRUD actions for Category model.
- */
+
 class ProductController extends Controller
 {
     public function behaviors(): array
@@ -36,10 +29,6 @@ class ProductController extends Controller
         ];
     }
 
-    /**
-     * Lists all User models.
-     * @return mixed
-     */
     public function actionIndex(): string
     {
         $searchModel = new ProductSearch();
@@ -47,34 +36,17 @@ class ProductController extends Controller
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $dataProvider
         ]);
     }
 
     /**
-     * Displays a single Category model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException
-     */
-    public function actionView($id): string
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-
-    /**
-     * Creates a new Category model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
      * @throws \yii\base\Exception
      */
-    public function actionCreate()
+    public function actionCreate(): Response|string
     {
         $model = new Product();
-        //$model->setScenario('create');
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
@@ -85,51 +57,36 @@ class ProductController extends Controller
     }
 
     /**
-     * Updates an existing Category model.
-     * @param integer $id
-     * @return mixed
      * @throws NotFoundHttpException
      * @throws \yii\base\Exception
      */
-    public function actionUpdate($id)
-    {//echo "<pre>";print_r($this->findModel($id));exit;
-        //$model = new CategoryForm();
-        //echo "<pre>";print_r($this->findModel($id));
-        //$model = new ProductForm();
-        //$model->setModel($this->findModel($id));
+    public function actionUpdate(int $id): Response|string
+    {
         $model = $this->findModel($id);
         $model->tags = $model->getTags();
-        //$model = $this->findModel($id);
-        //echo "<pre>";print_r($model->tags); exit;
-        //$model->load(Yii::$app->request->post());
-        //$model->save();echo "<pre>";print_r($model);exit;
-        // старое изображение, которое надо удалить, если загружено новое
-        $old = $model->image;
+
+        $oldImage = $model->image;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // если отмечен checkbox «Удалить изображение»
             if ($model->remove) {
-                // удаляем старое изображение
-                if (!empty($old)) {
-                    $model::removeImage($old);
+                if ($oldImage) {
+                    $model::removeImage($oldImage);
                 }
-                // сохраняем в БД пустое имя
                 $model->image = null;
-                // чтобы повторно не удалять
-                $old = null;
-            } else { // оставляем старое изображение
-                $model->image = $old;
+                $oldImage = null;
+            } else {
+                $model->image = $oldImage;
             }
-            // загружаем изображение и выполняем resize исходного изображения
+
             $model->upload = UploadedFile::getInstance($model, 'image');
-            if ($new = $model->uploadImage()) { // если изображение было загружено
-                // удаляем старое изображение
-                if (!empty($old)) {
-                    $model::removeImage($old);
+            $newImage = $model->uploadImage();
+            if ($newImage) {
+                if (!empty($oldImage)) {
+                    $model::removeImage($oldImage);
                 }
-                // сохраняем в БД новое имя
-                $model->image = $new;
+                $model->image = $newImage;
             }
             $model->save();
+
             return $this->redirect(['index']);
         }
 
@@ -139,16 +96,12 @@ class ProductController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
      * @throws NotFoundHttpException
      * @throws \Exception
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id): Response
+    public function actionDelete(int $id): Response
     {
         $model = $this->findModel($id);
 
@@ -163,13 +116,9 @@ class ProductController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Product the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id): Product
+    protected function findModel(int $id): Product
     {
         if (($model = Product::findOne($id, true)) !== null) {
             return $model;

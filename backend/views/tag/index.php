@@ -17,17 +17,17 @@ use yii\web\JsExpression;
 $this->title = Yii::t('backend', 'Tags');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="category-index">
+<div class="tag-index">
 
     <p>
         <?php echo Html::a(Yii::t('backend', 'Create {modelClass}', [
-            'modelClass' => 'Tag',
+            'modelClass' => 'Тега',
         ]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'options' => [
             'class' => 'grid-view table-responsive'
         ],

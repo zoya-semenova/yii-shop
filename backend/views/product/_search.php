@@ -5,12 +5,11 @@ use yii\bootstrap\ActiveForm;
 
 /**
  * @var $this yii\web\View
- * @var $model backend\models\search\UserSearch
  * @var $form yii\bootstrap\ActiveForm
  */
 ?>
 
-<div class="category-search">
+<div class="product-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],

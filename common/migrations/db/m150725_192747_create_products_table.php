@@ -2,18 +2,20 @@
 
 declare(strict_types=1);
 
-use common\models\Category;
 use yii\db\Migration;
 
-class m150725_192743_product extends Migration
+class m150725_192747_create_products_table extends Migration
 {
+    private const TABLE = '{{%products}}';
+
     public function safeUp(): void
     {
-        $this->createTable('{{%product}}', [
+        $this->createTable(self::TABLE, [
             'id' => $this->primaryKey(),
-            'category_id' => $this->integer()->notNull(),
+            'alias' => $this->string(),
             'title' => $this->string()->notNull(),
-            'price' => $this->string()->notNull(),
+            'category_id' => $this->integer()->notNull(),
+            'price' => $this->decimal()->notNull(),
             'image' => $this->string(),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
@@ -21,24 +23,21 @@ class m150725_192743_product extends Migration
 
         $this->addForeignKey(
             'fk-product-category_id',
-            'product',
+            self::TABLE,
             'category_id',
-            'category',
+            'categories',
             'id',
             'CASCADE'
         );
     }
 
-    /**
-     * @return bool|void
-     */
-    public function safeDown()
+    public function safeDown(): void
     {
         $this->dropForeignKey(
             'fk-product-category_id',
-            'product'
+            self::TABLE
         );
 
-        $this->dropTable('{{%product}}');
+        $this->dropTable(self::TABLE);
     }
 }
